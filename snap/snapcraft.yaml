@@ -1,0 +1,48 @@
+name: rain
+version: git
+summary: A development workflow tool for working with AWS CloudFormation.
+description: >
+  Rain is a development workflow tool for working with AWS CloudFormation.
+
+license: Apache-2.0
+
+base: core18
+
+grade: stable
+confinement: strict
+
+plugs:
+  config-aws:
+    interface: personal-files
+    read:
+      - $HOME/.aws
+
+parts:
+  launcher:
+    plugin: dump
+    source: snap/local/launchers
+    organize:
+      "*": bin/
+
+  rain:
+    plugin: nil
+    build-environment:
+      - GO111MODULE: "on"
+    build-packages:
+      - golang
+    source: .
+    override-build: |
+      go build -o rain
+      mv -v rain $SNAPCRAFT_PART_INSTALL/
+
+
+apps:
+  rain:
+    adapter: full
+    command-chain:
+      - bin/launcher.sh
+    command: rain
+    plugs:
+      - home
+      - network
+      - config-aws
