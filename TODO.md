@@ -1,16 +1,10 @@
 # To do
 
 * `deploy`
-    * Only show changing resources
     * Ensure update count reflects everything that has changed
     * Detect whether a deployment requires capabilities rather than automatically applying them
-
-* `rm`
-    * List stack contents and ask for confirmation
-    * Add `--force` flag
-
-* `ls`
-    * Display in yaml(ish) format
+    * Show details from nested stacks while deploying
+    * Handle deploying from a template URL
 
 ## Other ideas
 
