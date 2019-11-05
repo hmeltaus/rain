@@ -2,6 +2,7 @@ package cfn
 
 import (
 	"encoding/json"
+	"fmt"
 	"reflect"
 	"strings"
 
@@ -85,7 +86,7 @@ func checkResources(resources *value.Map) bool {
 
 		rSpec, ok := spec.Cfn.ResourceTypes[typeName]
 		if !ok {
-			t.SetComment("Unknown type")
+			t.SetComment(fmt.Sprintf("Unknown type '%s'", typeName))
 			outOk = false
 			continue
 		}
@@ -114,7 +115,7 @@ func checkProperties(rSpec models.ResourceType, props *value.Map) bool {
 
 		pSpec, ok := rSpec.Properties[name]
 		if !ok {
-			prop.SetComment("Unknown property")
+			prop.SetComment(fmt.Sprintf("Unknown property '%s'", name))
 			outOk = false
 		}
 

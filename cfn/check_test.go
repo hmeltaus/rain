@@ -74,7 +74,7 @@ func TestUnknownResourceType(t *testing.T) {
 		},
 	})
 
-	if ok || out.Get("Resources", "Bucket", "Type").Comment() != "Unknown type" {
+	if ok || out.Get("Resources", "Bucket", "Type").Comment() != "Unknown type 'SWA::3S::Tekcub'" {
 		t.Fail()
 	}
 }
@@ -106,7 +106,7 @@ func TestUnknownResourceProperty(t *testing.T) {
 		},
 	})
 
-	if ok || out.Get("Resources", "Bucket", "Properties", "BananaPhone").Comment() != "Unknown property" {
+	if ok || out.Get("Resources", "Bucket", "Properties", "BananaPhone").Comment() != "Unknown property 'BananaPhone'" {
 		t.Fail()
 	}
 }
