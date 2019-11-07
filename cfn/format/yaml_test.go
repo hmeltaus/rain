@@ -13,6 +13,8 @@ func TestYamlDirectValues(t *testing.T) {
 		"foo",
 		[]interface{}{1, "foo"},
 		map[string]interface{}{"foo": "bar", "baz": "quux"},
+		float64(500000000),
+		float64(500000000.98765),
 	}
 
 	expecteds := []string{
@@ -20,6 +22,8 @@ func TestYamlDirectValues(t *testing.T) {
 		"foo",
 		"- 1\n- foo",
 		"baz: quux\n\nfoo: bar",
+		"500000000",
+		"500000000.98765",
 	}
 
 	for i, testCase := range cases {
@@ -58,9 +62,11 @@ func TestYamlScalars(t *testing.T) {
 		{"foo": 1},
 		{"foo": 1.0},
 		{"foo": 1.234},
+		{"foo": float64(500000000)},
 		{"foo": "32"},
 		{"foo": "032"},
 		{"foo": "32.0"},
+		{"foo": "500000000"},
 		{"foo": "hello"},
 		{"foo": true},
 		{"foo": false},
@@ -70,9 +76,11 @@ func TestYamlScalars(t *testing.T) {
 		"foo: 1",
 		"foo: 1",
 		"foo: 1.234",
+		"foo: 500000000",
 		"foo: \"32\"",
 		"foo: \"032\"",
 		"foo: \"32.0\"",
+		"foo: \"500000000\"",
 		"foo: hello",
 		"foo: true",
 		"foo: false",
