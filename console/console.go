@@ -23,15 +23,19 @@ func init() {
 	HasColour = runtime.GOOS != "windows"
 }
 
+// Replace replaces all text on the console
+func Replace(content string) {
+	Clear()
+	fmt.Println(content)
+}
+
 // Clear removes all text from the console and puts the cursor in the top-left corner
-func Clear(content string) {
+func Clear() {
 	if IsTTY && HasColour {
 		fmt.Print("\033[1;1H\033[2J")
 	} else {
 		fmt.Println()
 	}
-
-	fmt.Println(content)
 }
 
 // ClearLine removes all text from the current line and puts the cursor on the left

@@ -19,19 +19,23 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation"
 )
 
-func colouriseStatus(status string) text.Text {
+func colouriseMessageFromStatus(status, message string) text.Text {
 	switch {
 	case strings.HasSuffix(status, "_FAILED"):
-		return text.Red(status)
+		return text.Red(message)
 	case strings.Contains(status, "ROLLBACK"):
-		return text.Orange(status)
+		return text.Orange(message)
 	case strings.HasSuffix(status, "_IN_PROGRESS"):
-		return text.Orange(status)
+		return text.Orange(message)
 	case strings.HasSuffix(status, "_COMPLETE"):
-		return text.Green(status)
+		return text.Green(message)
 	default:
-		return text.Plain(status)
+		return text.Plain(message)
 	}
+}
+
+func colouriseStatus(status string) text.Text {
+	return colouriseMessageFromStatus(status, status)
 }
 
 func getStackOutput(stack cloudformation.Stack, onlyChanging bool) string {
@@ -60,8 +64,26 @@ func getStackOutput(stack cloudformation.Stack, onlyChanging bool) string {
 	}
 
 	if len(resources) > 0 {
-		out.WriteString("  Resources:\n")
-		if !onlyChanging {
+		out.WriteString("  Resources:")
+		if onlyChanging {
+			parts := make([]string, len(resources))
+			messages := make([]string, 0)
+
+			for i, resource := range resources {
+				parts[i] = colouriseMessageFromStatus(string(resource.ResourceStatus), *resource.LogicalResourceId).String()
+
+				if resource.ResourceStatusReason != nil && *resource.ResourceStatusReason != "Resource creation Initiated" {
+					messages = append(messages, fmt.Sprintf("    %s: %s", *resource.LogicalResourceId, text.Yellow(*resource.ResourceStatusReason)))
+				}
+			}
+
+			out.WriteString(fmt.Sprintf("   [ %s ]\n", strings.Join(parts, ", ")))
+
+			if len(messages) > 0 {
+				out.WriteString(fmt.Sprintf("  Messages:\n%s", strings.Join(messages, "\n")))
+			}
+		} else {
+			out.WriteString("\n")
 			for _, resource := range resources {
 				// Long output
 				out.WriteString(fmt.Sprintf("    %s:  # %s\n", *resource.LogicalResourceId, colouriseStatus(string(resource.ResourceStatus))))
@@ -72,34 +94,6 @@ func getStackOutput(stack cloudformation.Stack, onlyChanging bool) string {
 				if resource.ResourceStatusReason != nil {
 					out.WriteString(fmt.Sprintf("      Message: %s\n", text.Yellow(*resource.ResourceStatusReason)))
 				}
-			}
-		} else {
-			completed := make([]string, 0)
-			updating := strings.Builder{}
-
-			for _, resource := range resources {
-				if resourceHasSettled(resource) {
-					completed = append(completed, *resource.LogicalResourceId)
-				} else {
-					// Short output
-					updating.WriteString(fmt.Sprintf("      %s: %s  # %s\n",
-						*resource.LogicalResourceId,
-						text.Yellow(*resource.ResourceType),
-						colouriseStatus(string(resource.ResourceStatus)),
-					))
-				}
-			}
-
-			if len(completed) > 0 {
-				out.WriteString(fmt.Sprintf("    Complete: %s\n",
-					text.Green(strings.Join(completed, " ")),
-				))
-			}
-
-			if len(updating.String()) > 0 {
-				out.WriteString(fmt.Sprintf("    Changing:\n%s\n",
-					updating.String(),
-				))
 			}
 		}
 	}
@@ -173,7 +167,7 @@ func waitForStackToSettle(stackName string) string {
 
 		// Send the output first
 		if console.IsTTY {
-			console.Clear(output)
+			console.Replace(output)
 			spinner.Update()
 		}
 
@@ -197,7 +191,7 @@ func waitForStackToSettle(stackName string) string {
 		// Check to see if we've finished
 		if stackHasSettled(stack) {
 			spinner.Stop()
-			console.Clear(output)
+			console.Replace(output)
 			return string(stack.StackStatus)
 		}
 
