@@ -119,7 +119,7 @@ func (p *encoder) sortKeys() []string {
 	if len(p.path) == 1 {
 		if p.path[0] == "Resources" {
 			if t, ok := p.value.Value().(map[string]interface{}); ok {
-				g := cfn.Template(t).Graph()
+				g := cfn.NewTemplate(t).Graph()
 
 				output := make([]string, 0)
 				for _, item := range g.Nodes() {

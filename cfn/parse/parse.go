@@ -44,13 +44,7 @@ func String(input string) (cfn.Template, error) {
 
 	transform(&node)
 
-	var output map[string]interface{}
-	err = node.Decode(&output)
-	if err != nil {
-		return cfn.Template{}, fmt.Errorf("Invalid template: %s", err)
-	}
-
-	return cfn.Template(output), nil
+	return cfn.Template{node}, nil
 }
 
 // Verify confirms that there is no semantic difference between

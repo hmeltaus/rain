@@ -8,7 +8,7 @@ import (
 )
 
 func wrap(data map[string]interface{}) (value.Interface, bool) {
-	return cfn.Template(data).Check()
+	return cfn.NewTemplate(data).Check()
 }
 
 func TestNoResources(t *testing.T) {

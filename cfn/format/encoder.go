@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/aws-cloudformation/rain/cfn"
 	"github.com/aws-cloudformation/rain/cfn/value"
 )
 
@@ -242,8 +241,6 @@ func (p encoder) formatList(data []interface{}) string {
 
 func (p encoder) format() string {
 	switch v := p.currentValue.Value().(type) {
-	case cfn.Template:
-		return p.formatMap(v.Map())
 	case map[string]interface{}:
 		return p.formatMap(v)
 	case []interface{}:

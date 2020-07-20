@@ -15,7 +15,7 @@ var testFile = "test.yaml"
 
 var testTemplate string
 
-var expected = cfn.Template(map[string]interface{}{
+var expected = cfn.NewTemplate(map[string]interface{}{
 	"Parameters": map[string]interface{}{
 		"Int": map[string]interface{}{
 			"Type":    "Number",
@@ -120,7 +120,7 @@ func TestReadString(t *testing.T) {
 }
 
 func TestVerifyOutput(t *testing.T) {
-	source := cfn.Template(map[string]interface{}{
+	source := cfn.NewTemplate(map[string]interface{}{
 		"foo": map[string]interface{}{
 			"bar": map[string]interface{}{
 				"Fn::GetAtt": []interface{}{
