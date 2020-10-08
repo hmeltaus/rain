@@ -1,5 +1,9 @@
 # To do
 
+* `cat` should do local files too
+
+* add recursive flag to `cat`. Grabs nested templates.
+
 * If `aws` is not installed or doesn't run, use decreased functionality
     * No `package` or `verify`
 

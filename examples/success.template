@@ -1,4 +1,4 @@
-Description: This template succeeds
+Description: This template succeeds # It's a winner
 
 Parameters:
   BucketName:

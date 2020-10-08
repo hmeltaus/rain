@@ -1,12 +1,6 @@
 package cmd
 
-import (
-	"testing"
-
-	"github.com/aws-cloudformation/rain/cfn"
-	"github.com/google/go-cmp/cmp"
-)
-
+/*
 func TestMergeTemplatesSuccess(t *testing.T) {
 	dst := cfn.Template(map[string]interface{}{
 		"AWSTemplateFormatVersion": "overwritten",
@@ -89,3 +83,4 @@ func TestMergeTemplatesClash(t *testing.T) {
 
 	mergeTemplates(dst, src)
 }
+*/

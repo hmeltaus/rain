@@ -1,14 +1,6 @@
 package cmd
 
-import (
-	"fmt"
-
-	"github.com/aws-cloudformation/rain/cfn"
-	"github.com/aws-cloudformation/rain/cfn/format"
-	"github.com/aws-cloudformation/rain/cfn/parse"
-	"github.com/spf13/cobra"
-)
-
+/*
 var forceMerge = false
 
 func checkMerge(name string, dst cfn.Template, src cfn.Template) {
@@ -39,7 +31,9 @@ func checkMerge(name string, dst cfn.Template, src cfn.Template) {
 }
 
 func mergeTemplates(dst cfn.Template, src cfn.Template) {
-	for key, value := range src.Map() {
+	dstMap, srcMap := dst.Map(), src.Map()
+
+	for key, value := range srcMap {
 		switch key {
 		case "AWSTemplateFormatVersion": // Always overwrite
 			dst[key] = value
@@ -104,3 +98,4 @@ func init() {
 	mergeCmd.Flags().BoolVarP(&forceMerge, "force", "f", false, "Don't warn on clashing attributes; rename them instead. Note: this will not rename Refs, GetAtts, etc.")
 	Rain.AddCommand(mergeCmd)
 }
+*/

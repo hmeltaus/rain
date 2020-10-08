@@ -1,0 +1,1 @@
+Move diff formatter to diff package. Reimplement template formatter in cfn package. Just take a template, step through it and do the things!
